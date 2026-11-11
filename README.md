@@ -1,3 +1,5 @@
+<p align="center"><img src="brand/leash-lockup.png" alt="Leash" width="420" /></p>
+
 # Leash
 
 Spending limits for AI agents on NEAR. If an agent is tricked into trying to send your money somewhere it shouldn't, Leash makes sure it can't spend more than you allowed.
