@@ -1,0 +1,9 @@
+# Build output
+target/
+dist/
+node_modules/
+
+# Secrets: never commit these
+.env
+**/.env
+.near-credentials/

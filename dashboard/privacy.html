@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy policy: Leash</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" width="26" height="26" /><span>Leash</span></a>
+      <span class="network">Testnet</span>
+    </header>
+    <main class="doc">
+      <h1>Privacy policy</h1>
+      <p class="muted">Last updated 11 November 2026</p>
+
+      <p>This policy covers the Leash dashboard, the web page for creating and managing Leash wallets on NEAR testnet. Leash is an experimental hackathon project.</p>
+
+      <h2>What we collect</h2>
+      <p>Nothing. The dashboard has no accounts, no sign-up, no analytics, no tracking cookies and no server of its own that stores data. It is a static page that runs in your browser.</p>
+
+      <h2>What happens when you use it</h2>
+      <ul>
+        <li><strong>Blockchain reads.</strong> To show a wallet, your browser asks a public NEAR RPC service (FastNEAR, at test.rpc.fastnear.com) for that wallet's public data. That service sees your IP address and which accounts you look up, under its own policy.</li>
+        <li><strong>Wallet connection.</strong> When you connect, you choose a NEAR wallet such as Meteor Wallet, through the NEAR Connect library. Your wallet holds your keys and asks you to approve each transaction. The dashboard never sees your private keys.</li>
+        <li><strong>Transactions are public.</strong> Everything you do with a Leash wallet, including its rules, approved recipients and payments, is recorded on the NEAR blockchain, where anyone can read it and it cannot be deleted.</li>
+        <li><strong>Fonts.</strong> The page loads its typeface from Google Fonts, so Google receives your IP address when the page loads.</li>
+        <li><strong>Hosting.</strong> The page is served by Vercel, which keeps standard request logs.</li>
+      </ul>
+
+      <h2>Stored on your device</h2>
+      <p>If you open a wallet by its account name, the dashboard remembers that name in your browser's local storage so it stays in your list. It never leaves your device. Clearing your browser's site data removes it.</p>
+
+      <h2>Changes</h2>
+      <p>If this policy changes, the date at the top will change with it.</p>
+    </main>
+    <footer class="site-footer">
+      <a href="/">Dashboard</a>
+      <a href="/privacy.html">Privacy policy</a>
+      <a href="/terms.html">Terms</a>
+    </footer>
+  </body>
+</html>

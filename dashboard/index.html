@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leash: spending limits for AI agents</title>
+    <meta name="description" content="Create and manage Leash wallets: on-chain spending limits for AI agents on NEAR." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">
+        <img src="/favicon.svg" alt="" width="26" height="26" />
+        <span>Leash</span>
+      </a>
+      <span class="network" id="network"></span>
+      <div class="session" id="session"></div>
+    </header>
+    <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
+    <div class="layout">
+      <nav class="rail" id="rail" aria-label="Wallets"></nav>
+      <main class="main" id="main"></main>
+    </div>
+    <footer class="site-footer">
+      <a href="/privacy.html">Privacy policy</a>
+      <a href="/terms.html">Terms</a>
+      <span class="muted">Testnet only. Unaudited, don't use with real funds.</span>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
