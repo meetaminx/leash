@@ -198,7 +198,7 @@
 .section-lede { font-size: 1.08rem; color: #33444a; max-width: 44em; margin-bottom: 36px; }
 .two-col { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
 .two-col p { margin-bottom: 14px; font-size: 1.05rem; color: #33444a; }
-.landing code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; font-size: 0.88em; background: #e2e8e6; padding: 1px 5px; border-radius: 4px; font-weight: 500; }
+.landing code { font-family: var(--mono); font-size: 0.88em; background: #e2e8e6; padding: 1px 5px; border-radius: 4px; font-weight: 500; }
 
 /* Viewer */
 .viewer { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
@@ -216,7 +216,7 @@
 .agent-text {
   margin: 0;
   white-space: pre-wrap;
-  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mono);
   font-size: 0.85rem;
   line-height: 1.6;
   color: var(--ink-soft);
@@ -325,7 +325,7 @@
 .wt-bar span:last-child { font-weight: 500; color: #c3cfcd; font-size: 0.88rem; }
 .wt-pill { border: 1px solid #4b5d62; border-radius: 5px; padding: 3px 9px; }
 .wt-body { padding: 22px; display: grid; gap: 10px; align-content: start; }
-.wt-body.mono { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; font-size: 0.92rem; gap: 4px; }
+.wt-body.mono { font-family: var(--mono); font-size: 0.92rem; gap: 4px; }
 .wt-h { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
 .wt-input { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; color: var(--ink-soft); font-size: 0.9rem; }
 .wt-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; }
@@ -367,7 +367,7 @@
   border-radius: 12px;
   background: var(--ink);
   color: #e6ecea;
-  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mono);
   font-size: 0.88rem;
   line-height: 1.65;
   overflow-x: auto;
@@ -423,3 +423,12 @@ details p { margin-top: 10px; color: #33444a; }
 .wrap.narrow { max-width: 1120px; }
 #faq details, #faq h2 { max-width: 760px; }
 main section[id] { scroll-margin-top: 72px; }
+
+/* On-chain values in IBM Plex Mono: accounts, contract messages, transactions */
+.page-row span:last-child, .packet-label, .verdict span, .sim-verdict span,
+.proof td:nth-child(2), .proof td:nth-child(3), .wt-li, .wt-input,
+.mock-shop strong, .cases dd { font-family: var(--mono); }
+.page-row span:last-child, .proof td:nth-child(2), .wt-li { font-size: 0.92em; font-weight: 500; }
+.verdict span, .sim-verdict span { font-size: 0.86em; }
+.cases dd { font-size: 0.9em; font-weight: 500; }
+.agent-text { font-size: 0.82rem; }
