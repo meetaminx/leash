@@ -36,21 +36,18 @@ document.querySelectorAll("[data-replay]").forEach((btn) =>
     playHero();
   }),
 );
-// Start the animation when the scene is actually on screen (it sits below the fold on phones).
-if ("IntersectionObserver" in window) {
-  const io = new IntersectionObserver(
-    (entries) => {
-      if (entries.some((e) => e.isIntersecting)) {
-        io.disconnect();
-        playHero();
-      }
-    },
-    { threshold: 0.7 },
-  );
-  io.observe(scene);
-} else {
+// Play on load, hold the result, then replay, so it's running whenever someone looks.
+const LOOP_MS = 10500;
+let loopTimer;
+function loopHero() {
   playHero();
+  clearInterval(loopTimer);
+  if (!reduceMotion) loopTimer = setInterval(() => {
+    if (!document.hidden) playHero();
+  }, LOOP_MS);
 }
+document.querySelectorAll("[data-replay]").forEach((btn) => btn.addEventListener("click", loopHero));
+loopHero();
 
 // ---------------------------------------------------------------------------
 // "What a person sees" vs "What the agent reads"

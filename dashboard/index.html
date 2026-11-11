@@ -42,7 +42,10 @@
 
         <figure class="scene" id="scene" aria-label="Animation: an AI agent reads a shop page with hidden instructions, tries to pay an attacker, and Leash blocks the payment.">
           <div class="scene-card page-card">
-            <div class="card-label">Shop page</div>
+            <div class="card-head">
+              <svg class="card-icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="22" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M5 11h22" stroke="currentColor" stroke-width="2.2"/><circle cx="8.5" cy="8" r="1" fill="currentColor"/><circle cx="11.5" cy="8" r="1" fill="currentColor"/></svg>
+              <span class="card-title">Shop page</span>
+            </div>
             <div class="page-title">NodeHost API credits</div>
             <div class="page-row"><span>1,000 credits</span><span class="num">0.2 NEAR</span></div>
             <div class="page-row"><span>Pay to</span><span>meetaminx-shop.testnet</span></div>
@@ -50,20 +53,24 @@
           </div>
 
           <div class="scene-card agent-card">
-            <svg class="agent-glyph" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="32" height="26" rx="7" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="19" cy="25" r="3" fill="currentColor"/><circle cx="29" cy="25" r="3" fill="currentColor"/><path d="M24 12V6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="5" r="2.5" fill="currentColor"/></svg>
-            <div>
-              <div class="card-label">AI agent</div>
-              <div class="agent-thought">"Billing moved. I'll pay nodehost-billing.testnet."</div>
+            <div class="card-head">
+              <svg class="card-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="32" height="26" rx="7" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="19" cy="25" r="3" fill="currentColor"/><circle cx="29" cy="25" r="3" fill="currentColor"/><path d="M24 12V6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="5" r="2.5" fill="currentColor"/></svg>
+              <span class="card-title">AI agent</span>
             </div>
+            <p class="agent-thought">"Billing moved. I'll pay nodehost-billing.testnet."</p>
           </div>
 
           <div class="rope" aria-hidden="true">
+            <div class="packet-label">0.2 NEAR</div>
             <div class="rope-line"></div>
-            <div class="packet">0.2 NEAR</div>
+            <div class="packet"></div>
           </div>
 
           <div class="scene-card wallet-card">
-            <div class="card-label">Leash wallet</div>
+            <div class="card-head">
+              <svg class="card-icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="11" r="4.5" fill="none" stroke="var(--rope)" stroke-width="2.6"/><path d="M14.2 14.2 Q20 18 18 22 T24 26" fill="none" stroke="var(--rope)" stroke-width="2.6" stroke-linecap="round"/></svg>
+              <span class="card-title">Leash wallet</span>
+            </div>
             <ul class="checks">
               <li data-check="allow"><span class="tick"></span>Approved recipient</li>
               <li data-check="cap"><span class="tick"></span>Under 1 NEAR per payment</li>
