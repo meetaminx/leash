@@ -1,6 +1,11 @@
-# Leash dashboard
+# Leash website and dashboard
 
-A web page for Leash wallet owners. Connect a NEAR wallet, then:
+Two parts:
+
+- `/`: the landing page, explaining Leash with an animated attack, a page viewer, a payment simulator that runs the contract's checks, use cases, testnet proof and a setup walkthrough (`index.html`, `src/landing.js`, `src/landing.css`)
+- `/app/`: the dashboard for Leash wallet owners (`app/index.html`, `src/main.js`)
+
+The dashboard is a web page for Leash wallet owners. Connect a NEAR wallet, then:
 
 - create a Leash wallet through the factory, with its agent, limits and approved recipients
 - see how much the agent can still spend today, against the approval limit and per-payment cap
@@ -20,7 +25,7 @@ cp .env.example .env    # set VITE_FACTORY_ID to your factory account
 npm run dev
 ```
 
-Open http://localhost:5173.
+Open http://localhost:5173 for the landing page, or http://localhost:5173/app/ for the dashboard.
 
 To sign in with an account you created with the NEAR CLI, import its key into a browser wallet that supports testnet (for example Meteor Wallet, "import with private key"). The key is in `~/.near-credentials/testnet/<account>.json`. Only do this with testnet accounts.
 

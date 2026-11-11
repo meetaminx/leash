@@ -2,6 +2,11 @@
 
 Spending limits for AI agents on NEAR. If an agent is tricked into trying to send your money somewhere it shouldn't, Leash makes sure it can't spend more than you allowed.
 
+- **Website:** https://leash-dashboard-ten.vercel.app
+- **Dashboard (testnet):** https://leash-dashboard-ten.vercel.app/app/
+- **Code:** https://github.com/meetaminx/leash
+- **Factory:** `meetaminx-factory.testnet`, demo wallet: `meetaminx-leash.testnet`
+
 ## Also submitted by this team
 
 **Payseal**: private payslip verification. Prove your income meets a requirement without revealing your payslip.
@@ -48,7 +53,7 @@ Leash starts from the assumption that an agent will eventually be fooled, and ma
 
 ## Demo
 
-Leash is live on NEAR testnet at `meetaminx-leash.testnet`. The demo agent (`agent/`) is an LLM purchasing agent (`openai/gpt-oss-120b` on Groq) that reads a vendor's page and pays through Leash. It has no injection defenses of its own. In these runs the model **was fooled both times**, and the contract stopped it both times.
+Leash is live on NEAR testnet at `meetaminx-leash.testnet`, and you can open it in the [dashboard](https://leash-dashboard-ten.vercel.app/app/?wallet=meetaminx-leash.testnet). The demo agent (`agent/`) is an LLM purchasing agent (`openai/gpt-oss-120b` on Groq) that reads a vendor's page and pays through Leash. It has no injection defenses of its own. In these runs the model **was fooled both times**, and the contract stopped it both times.
 
 | Run | What the page said | What the agent tried | Leash | Transaction |
 | --- | --- | --- | --- | --- |

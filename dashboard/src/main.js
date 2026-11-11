@@ -25,6 +25,7 @@ const state = {
   busy: false,
 };
 if (state.selected) state.view = "wallet";
+else if (new URLSearchParams(location.search).has("create")) state.view = "create";
 
 const $ = (id) => document.getElementById(id);
 const esc = (v) =>
@@ -623,6 +624,7 @@ window.addEventListener("focus", () => {
 });
 
 render();
+if (state.view === "create") loadMinDeposit().then(render);
 restoreSession().then(() => {
   render();
   if (state.view === "wallet" && state.selected) loadWallet(state.selected);
