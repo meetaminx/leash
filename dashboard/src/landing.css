@@ -183,7 +183,7 @@
 .section-lede { font-size: 1.08rem; color: #33444a; max-width: 44em; margin-bottom: 36px; }
 .two-col { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
 .two-col p { margin-bottom: 14px; font-size: 1.05rem; color: #33444a; }
-code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; font-size: 0.88em; background: #e2e8e6; padding: 1px 5px; border-radius: 4px; font-weight: 500; }
+.landing code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; font-size: 0.88em; background: #e2e8e6; padding: 1px 5px; border-radius: 4px; font-weight: 500; }
 
 /* Viewer */
 .viewer { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
