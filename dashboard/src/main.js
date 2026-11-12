@@ -168,6 +168,11 @@ async function loadWallet(id) {
       : /MethodNotFound|CodeDoesNotExist|wasm execution failed|CompilationError/i.test(msg)
         ? `${id} isn't a Wardly wallet.`
         : `Couldn't load ${id}: ${msg}`;
+    // Don't keep accounts that aren't Wardly wallets in "Your wallets".
+    if (/doesn't exist|isn't a Wardly wallet/.test(state.loadError) && state.opened.includes(id)) {
+      state.opened = state.opened.filter((x) => x !== id);
+      saveOpened();
+    }
   }
   render();
 }
