@@ -15,8 +15,16 @@ function finishInstantly(resolve) {
   resolve();
 }
 
+let markRevealing = () => {};
+// Resolves when the page starts to show (or straight away when there's no intro),
+// so the hero can begin animating while the circle is still opening.
+window.__introReveal = new Promise((r) => (markRevealing = r));
+
 window.__introDone = new Promise((resolve) => {
-  if (!overlay || !root.classList.contains("intro-on")) return finishInstantly(resolve);
+  if (!overlay || !root.classList.contains("intro-on")) {
+    markRevealing();
+    return finishInstantly(resolve);
+  }
 
   try {
     sessionStorage.setItem("wardly.intro", "1");
@@ -49,6 +57,7 @@ window.__introDone = new Promise((resolve) => {
     overlay.remove();
     removeEventListener("pointerdown", skip, true);
     removeEventListener("keydown", skip, true);
+    markRevealing();
     resolve();
   }
 
@@ -62,10 +71,21 @@ window.__introDone = new Promise((resolve) => {
   addEventListener("keydown", skip, true);
 
   // Open a hole in the overlay that grows from (x, y) until the page shows.
+  // The browser interpolates the clip path itself, which is smoother than
+  // redrawing a mask every frame. Older browsers fall back to the mask.
+  const W = innerWidth, H = innerHeight;
+  const holePath = (x, y, r) =>
+    `path(evenodd, "M0 0H${W}V${H}H0Z M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z")`;
+  const canClipPath = window.CSS?.supports?.("clip-path", 'path(evenodd, "M0 0H1V1H0Z")');
+
   function openHole(x, y, ms) {
+    const big = Math.hypot(Math.max(x, W - x), Math.max(y, H - y)) + 4;
+    const easing = "cubic-bezier(.33,.0,.15,1)"; // quick start, gentle finish
+    if (canClipPath) {
+      return anim(overlay, [{ clipPath: holePath(x, y, 0.5) }, { clipPath: holePath(x, y, big) }], { duration: ms, easing });
+    }
     return new Promise((r) => {
-      const big = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 4;
-      const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+      const ease = (t) => 1 - Math.pow(1 - t, 3);
       const t0 = performance.now();
       const step = (now) => {
         if (done) return r();
@@ -91,7 +111,7 @@ window.__introDone = new Promise((resolve) => {
     await anim(word, [{ opacity: 0, transform: "translateX(-10px)" }, { opacity: 1, transform: "none" }], { duration: 300 });
     await wait(120);
     await anim(dot, [{ transform: "scale(0)" }, { transform: "scale(1.3)" }, { transform: "scale(1)" }], { duration: 240 });
-    await wait(120);
+    await wait(80);
     if (done) return;
 
     const r = dot.getBoundingClientRect();
@@ -102,9 +122,10 @@ window.__introDone = new Promise((resolve) => {
     flood.style.top = `${y - size / 2}px`;
     flood.style.width = flood.style.height = `${size}px`;
     const scale = (Math.hypot(innerWidth, innerHeight) * 2.1) / size;
-    anim(flood, [{ transform: "scale(0)" }, { transform: `scale(${scale})` }], { duration: 620, easing: "cubic-bezier(.65,0,.35,1)" });
-    await wait(200);
-    await openHole(x, y, 650);
+    anim(flood, [{ transform: "scale(0)" }, { transform: `scale(${scale})` }], { duration: 560, easing: "cubic-bezier(.45,0,.2,1)" });
+    await wait(130);
+    markRevealing();
+    await openHole(x, y, 620);
     end();
   })();
 });

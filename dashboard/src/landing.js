@@ -74,7 +74,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // Start the hero once the intro (if any) has opened the page.
-window.__introDone.then(loopHero);
+window.__introReveal.then(loopHero);
 
 // ---------------------------------------------------------------------------
 // "What a person sees" vs "What the agent reads"
