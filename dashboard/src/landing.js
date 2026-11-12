@@ -1,5 +1,7 @@
 // Landing page: hero animation, page viewer, payment simulator, walkthrough.
 
+import "./intro.js";
+
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // ---------------------------------------------------------------------------
@@ -47,7 +49,8 @@ function loopHero() {
   }, LOOP_MS);
 }
 document.querySelectorAll("[data-replay]").forEach((btn) => btn.addEventListener("click", loopHero));
-loopHero();
+// Start the hero once the intro (if any) has opened the page.
+window.__introDone.then(loopHero);
 
 // ---------------------------------------------------------------------------
 // "What a person sees" vs "What the agent reads"

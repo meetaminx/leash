@@ -12,8 +12,32 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/src/style.css" />
     <link rel="stylesheet" href="/src/landing.css" />
+    <style>
+      /* Paint the intro's background on the very first frame, before the main stylesheet. */
+      .intro-on #intro { position: fixed; inset: 0; z-index: 100; background: #1d2a2e; }
+      .intro-on, .intro-on body { overflow: hidden; background: #1d2a2e; }
+    </style>
+    <script>
+      // Decide before first paint whether to play the intro (once per visit).
+      try {
+        if (!matchMedia("(prefers-reduced-motion: reduce)").matches && !location.hash && !sessionStorage.getItem("wardly.intro")) {
+          document.documentElement.classList.add("intro-on");
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body class="landing">
+    <div id="intro" aria-hidden="true">
+      <div class="intro-flood"></div>
+      <div class="intro-lockup">
+        <svg class="intro-mark" viewBox="0 0 64 64">
+          <circle class="intro-loop" cx="15" cy="16" r="6" pathLength="1" />
+          <path class="intro-lead" d="M15 22c0 14 2 24 7 24s6-16 10-16 5 16 10 16 6-14 6-24" pathLength="1" />
+          <rect class="intro-clip" x="43" y="11" width="10" height="10" rx="3" />
+        </svg>
+        <span class="intro-word">Wardly<span class="intro-dot"></span></span>
+      </div>
+    </div>
     <header class="topbar lp-nav">
       <a class="brand" href="/"><img src="/logo-mark-outline.svg" alt="" width="30" height="30" /><span>Wardly</span></a>
       <span class="network">Testnet</span>
