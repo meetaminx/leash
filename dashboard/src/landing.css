@@ -432,3 +432,8 @@ main section[id] { scroll-margin-top: 72px; }
 .verdict span, .sim-verdict span { font-size: 0.86em; }
 .cases dd { font-size: 0.9em; font-weight: 500; }
 .agent-text { font-size: 0.82rem; }
+
+/* Smooth scrolling for the header links, unless the visitor asked for less motion */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
