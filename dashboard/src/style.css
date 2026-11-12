@@ -142,7 +142,7 @@ textarea { min-height: 70px; resize: vertical; }
 .status.paused { background: var(--danger-bg); color: var(--danger); }
 .readonly { margin-top: 14px; padding: 10px 12px; border-left: 3px solid var(--rope); background: #f7f2e7; }
 
-/* The leash meter: how much the agent can still spend today */
+/* The allowance meter: how much the agent can still spend today */
 .meter { margin-top: 22px; }
 .meter-figure { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .meter-figure strong { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; }

@@ -2,7 +2,7 @@
 //
 // Scans the text the agent is about to read with Llama Prompt Guard 2
 // (a small classifier built to spot prompt injection and jailbreaks).
-// It is a warning layer only. Leash does not depend on it: when it misses,
+// It is a warning layer only. Wardly does not depend on it: when it misses,
 // the contract's rules still hold.
 
 export const PROMPT_GUARD_MODEL = "meta-llama/llama-prompt-guard-2-86m";

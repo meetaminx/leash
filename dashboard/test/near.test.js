@@ -25,7 +25,7 @@ test("percent is clamped", () => {
 });
 
 test("finds contract error messages", () => {
-  assert.equal(contractError({ x: "Smart contract panicked: LEASH: only the owner can do this" }), "LEASH: only the owner can do this");
+  assert.equal(contractError({ x: "Smart contract panicked: WARDLY: only the owner can do this" }), "WARDLY: only the owner can do this");
   assert.equal(contractError(new Error("FACTORY: name must be 2 to 32 characters")), "FACTORY: name must be 2 to 32 characters");
   assert.equal(contractError("nothing here"), null);
 });

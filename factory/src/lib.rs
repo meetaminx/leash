@@ -1,7 +1,7 @@
-//! Leash factory: creates a personal Leash wallet in one transaction.
+//! Wardly factory: creates a personal Wardly wallet in one transaction.
 //!
-//! Calling `create_leash` with a name like "alice" creates the account
-//! `alice.<factory>`, deploys the Leash contract to it, and sets it up with
+//! Calling `create_wallet` with a name like "alice" creates the account
+//! `alice.<factory>`, deploys the Wardly contract to it, and sets it up with
 //! the caller as owner, plus the agent, limits and approved recipients they
 //! chose. The attached deposit pays for the contract's storage, and the rest
 //! becomes the wallet's first balance.
@@ -16,11 +16,11 @@ use near_sdk::{
     PromiseError,
 };
 
-/// The compiled Leash contract. Build `contract/` first (see README).
+/// The compiled Wardly contract. Build `contract/` first (see README).
 #[cfg(not(test))]
-const LEASH_CODE: &[u8] = include_bytes!("../../contract/target/near/leash.wasm");
+const WARDLY_CODE: &[u8] = include_bytes!("../../contract/target/near/wardly.wasm");
 #[cfg(test)]
-const LEASH_CODE: &[u8] = &[0u8; 1000];
+const WARDLY_CODE: &[u8] = &[0u8; 1000];
 
 const GAS_FOR_INIT: Gas = Gas::from_tgas(30);
 const GAS_FOR_CALLBACK: Gas = Gas::from_tgas(10);
@@ -35,13 +35,13 @@ enum StorageKey {
 
 #[near(contract_state)]
 #[derive(PanicOnDefault)]
-pub struct LeashFactory {
+pub struct WardlyFactory {
     by_owner: LookupMap<AccountId, Vec<AccountId>>,
     total_created: u64,
 }
 
 #[near]
-impl LeashFactory {
+impl WardlyFactory {
     #[init]
     pub fn new() -> Self {
         Self {
@@ -50,10 +50,10 @@ impl LeashFactory {
         }
     }
 
-    /// Create `<name>.<factory>` as a Leash wallet owned by the caller.
+    /// Create `<name>.<factory>` as a Wardly wallet owned by the caller.
     /// Attach at least `get_min_deposit()`. Attach 150 Tgas or more.
     #[payable]
-    pub fn create_leash(
+    pub fn create_wallet(
         &mut self,
         name: String,
         agent: AccountId,
@@ -71,7 +71,7 @@ impl LeashFactory {
                 self.get_min_deposit().as_yoctonear()
             )
         );
-        let leash_id = Self::leash_account_id(&name);
+        let wallet_id = Self::wallet_account_id(&name);
         require!(owner != agent, "FACTORY: owner and agent must be different accounts");
 
         let init_args = near_sdk::serde_json::json!({
@@ -83,10 +83,10 @@ impl LeashFactory {
             "recipients": recipients,
         });
 
-        Promise::new(leash_id.clone())
+        Promise::new(wallet_id.clone())
             .create_account()
             .transfer(deposit)
-            .deploy_contract(LEASH_CODE.to_vec())
+            .deploy_contract(WARDLY_CODE.to_vec())
             .function_call(
                 "new".to_string(),
                 init_args.to_string().into_bytes(),
@@ -96,28 +96,28 @@ impl LeashFactory {
             .then(
                 Self::ext(env::current_account_id())
                     .with_static_gas(GAS_FOR_CALLBACK)
-                    .on_leash_created(leash_id, owner, U128(deposit.as_yoctonear())),
+                    .on_wallet_created(wallet_id, owner, U128(deposit.as_yoctonear())),
             )
     }
 
     /// Records the new wallet, or refunds the caller if creation failed.
     #[private]
-    pub fn on_leash_created(&mut self, leash_id: AccountId, owner: AccountId, deposit: U128) -> bool {
+    pub fn on_wallet_created(&mut self, wallet_id: AccountId, owner: AccountId, deposit: U128) -> bool {
         let ok = env::promise_result_checked(0, 0).is_ok()
             || matches!(env::promise_result_checked(0, 0), Err(PromiseError::TooLong(_)));
         if ok {
             let mut list = self.by_owner.get(&owner).cloned().unwrap_or_default();
-            list.push(leash_id.clone());
+            list.push(wallet_id.clone());
             self.by_owner.insert(owner, list);
             self.total_created += 1;
             env::log_str(&format!(
-                r#"EVENT_JSON:{{"standard":"leash-factory","version":"1.0.0","event":"leash_created","data":[{{"leash":"{}"}}]}}"#,
-                leash_id
+                r#"EVENT_JSON:{{"standard":"wardly-factory","version":"1.0.0","event":"wallet_created","data":[{{"wardly":"{}"}}]}}"#,
+                wallet_id
             ));
             true
         } else {
             Promise::new(owner).transfer(NearToken::from_yoctonear(deposit.0)).detach();
-            env::log_str(&format!("FACTORY: could not create {leash_id}, deposit refunded"));
+            env::log_str(&format!("FACTORY: could not create {wallet_id}, deposit refunded"));
             false
         }
     }
@@ -126,19 +126,19 @@ impl LeashFactory {
     // Views
     // ------------------------------------------------------------------
 
-    /// Smallest deposit `create_leash` accepts: storage for the contract code plus headroom.
+    /// Smallest deposit `create_wallet` accepts: storage for the contract code plus headroom.
     pub fn get_min_deposit(&self) -> NearToken {
         env::storage_byte_cost()
-            .saturating_mul(LEASH_CODE.len() as u128)
+            .saturating_mul(WARDLY_CODE.len() as u128)
             .saturating_add(EXTRA_DEPOSIT)
     }
 
     /// The account a given name would get, e.g. "alice" -> "alice.factory.testnet".
-    pub fn get_leash_account_id(&self, name: String) -> AccountId {
-        Self::leash_account_id(&name)
+    pub fn get_wallet_account_id(&self, name: String) -> AccountId {
+        Self::wallet_account_id(&name)
     }
 
-    pub fn get_leashes(&self, owner: AccountId) -> Vec<AccountId> {
+    pub fn get_wallets(&self, owner: AccountId) -> Vec<AccountId> {
         self.by_owner.get(&owner).cloned().unwrap_or_default()
     }
 
@@ -150,7 +150,7 @@ impl LeashFactory {
     // Internal
     // ------------------------------------------------------------------
 
-    fn leash_account_id(name: &str) -> AccountId {
+    fn wallet_account_id(name: &str) -> AccountId {
         require!(
             (2..=32).contains(&name.len()),
             "FACTORY: name must be 2 to 32 characters"
@@ -205,8 +205,8 @@ mod tests {
         );
     }
 
-    fn create(f: &mut LeashFactory, name: &str) {
-        f.create_leash(
+    fn create(f: &mut WardlyFactory, name: &str) {
+        f.create_wallet(
             name.to_string(),
             bot(),
             NearToken::from_near(1),
@@ -220,22 +220,22 @@ mod tests {
     #[test]
     fn names_map_to_subaccounts() {
         ctx(alice(), NearToken::from_near(0));
-        let f = LeashFactory::new();
-        assert_eq!(f.get_leash_account_id("alice".into()).as_str(), "alice.factory.testnet");
+        let f = WardlyFactory::new();
+        assert_eq!(f.get_wallet_account_id("alice".into()).as_str(), "alice.factory.testnet");
     }
 
     #[test]
     fn min_deposit_covers_code_storage() {
         ctx(alice(), NearToken::from_near(0));
-        let f = LeashFactory::new();
-        let code_cost = env::storage_byte_cost().saturating_mul(LEASH_CODE.len() as u128);
+        let f = WardlyFactory::new();
+        let code_cost = env::storage_byte_cost().saturating_mul(WARDLY_CODE.len() as u128);
         assert!(f.get_min_deposit() > code_cost);
     }
 
     #[test]
     fn create_with_enough_deposit_is_accepted() {
         ctx(alice(), NearToken::from_near(3));
-        let mut f = LeashFactory::new();
+        let mut f = WardlyFactory::new();
         create(&mut f, "alice-bot");
     }
 
@@ -243,7 +243,7 @@ mod tests {
     #[should_panic(expected = "attach at least")]
     fn create_without_deposit_is_rejected() {
         ctx(alice(), NearToken::from_yoctonear(1));
-        let mut f = LeashFactory::new();
+        let mut f = WardlyFactory::new();
         create(&mut f, "alice");
     }
 
@@ -251,7 +251,7 @@ mod tests {
     #[should_panic(expected = "lowercase letters")]
     fn uppercase_names_are_rejected() {
         ctx(alice(), NearToken::from_near(3));
-        let mut f = LeashFactory::new();
+        let mut f = WardlyFactory::new();
         create(&mut f, "Alice");
     }
 
@@ -259,7 +259,7 @@ mod tests {
     #[should_panic(expected = "can't start or end")]
     fn names_with_edge_dashes_are_rejected() {
         ctx(alice(), NearToken::from_near(3));
-        let mut f = LeashFactory::new();
+        let mut f = WardlyFactory::new();
         create(&mut f, "-alice");
     }
 
@@ -267,29 +267,29 @@ mod tests {
     #[should_panic(expected = "owner and agent must be different")]
     fn owner_cannot_be_the_agent() {
         ctx(bot(), NearToken::from_near(3));
-        let mut f = LeashFactory::new();
+        let mut f = WardlyFactory::new();
         create(&mut f, "bot");
     }
 
     #[test]
     fn success_is_recorded_for_the_owner() {
         ctx(alice(), NearToken::from_near(0));
-        let mut f = LeashFactory::new();
+        let mut f = WardlyFactory::new();
         callback_ctx(PromiseResult::Successful(vec![]));
-        let ok = f.on_leash_created("alice.factory.testnet".parse().unwrap(), alice(), U128(1));
+        let ok = f.on_wallet_created("alice.factory.testnet".parse().unwrap(), alice(), U128(1));
         assert!(ok);
-        assert_eq!(f.get_leashes(alice()), vec!["alice.factory.testnet".parse::<AccountId>().unwrap()]);
+        assert_eq!(f.get_wallets(alice()), vec!["alice.factory.testnet".parse::<AccountId>().unwrap()]);
         assert_eq!(f.get_total_created(), 1);
     }
 
     #[test]
     fn failure_is_not_recorded() {
         ctx(alice(), NearToken::from_near(0));
-        let mut f = LeashFactory::new();
+        let mut f = WardlyFactory::new();
         callback_ctx(PromiseResult::Failed);
-        let ok = f.on_leash_created("alice.factory.testnet".parse().unwrap(), alice(), U128(1));
+        let ok = f.on_wallet_created("alice.factory.testnet".parse().unwrap(), alice(), U128(1));
         assert!(!ok);
-        assert!(f.get_leashes(alice()).is_empty());
+        assert!(f.get_wallets(alice()).is_empty());
         assert_eq!(f.get_total_created(), 0);
     }
 }

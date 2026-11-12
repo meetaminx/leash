@@ -4,7 +4,7 @@ import { contractError, createRpc, nearToYocto, outcomeFailed, percent, yoctoToN
 const cfg = {
   network: import.meta.env.VITE_NETWORK || "testnet",
   rpcUrl: import.meta.env.VITE_RPC_URL || "https://test.rpc.fastnear.com",
-  factoryId: import.meta.env.VITE_FACTORY_ID || "meetaminx-factory.testnet",
+  factoryId: import.meta.env.VITE_FACTORY_ID || "meetaminx-wardly-factory.testnet",
   explorer: import.meta.env.VITE_EXPLORER_URL || "https://explorer.testnet.near.org",
 };
 
@@ -15,7 +15,7 @@ const TGAS = 10n ** 12n;
 const state = {
   account: null,
   wallet: null,
-  myLeashes: [],
+  myWallets: [],
   opened: loadOpened(),
   selected: new URLSearchParams(location.search).get("wallet"),
   view: null, // "create" | "wallet" | null
@@ -38,14 +38,14 @@ const near = (yocto) => `${yoctoToNear(yocto)} NEAR`;
 
 function loadOpened() {
   try {
-    return JSON.parse(localStorage.getItem("leash.opened") || "[]");
+    return JSON.parse(localStorage.getItem("wardly.opened") || "[]");
   } catch {
     return [];
   }
 }
 function saveOpened() {
   try {
-    localStorage.setItem("leash.opened", JSON.stringify(state.opened));
+    localStorage.setItem("wardly.opened", JSON.stringify(state.opened));
   } catch {
     /* storage unavailable: the list just won't persist */
   }
@@ -64,14 +64,14 @@ const connector = new NearConnector({
 connector.on("wallet:signIn", async (event) => {
   state.account = event.accounts[0]?.accountId ?? null;
   state.wallet = await connector.wallet();
-  await loadMyLeashes();
+  await loadMyWallets();
   render();
 });
 
 connector.on("wallet:signOut", () => {
   state.account = null;
   state.wallet = null;
-  state.myLeashes = [];
+  state.myWallets = [];
   render();
 });
 
@@ -80,7 +80,7 @@ async function restoreSession() {
     const { wallet, accounts } = await connector.getConnectedWallet();
     state.wallet = wallet;
     state.account = accounts[0]?.accountId ?? null;
-    await loadMyLeashes();
+    await loadMyWallets();
   } catch {
     /* not connected yet */
   }
@@ -102,7 +102,7 @@ async function disconnect() {
   }
   state.account = null;
   state.wallet = null;
-  state.myLeashes = [];
+  state.myWallets = [];
   render();
 }
 
@@ -128,12 +128,12 @@ async function call(receiverId, methodName, args, { deposit = "0", tgas = 50 } =
 // Data
 // ---------------------------------------------------------------------------
 
-async function loadMyLeashes() {
+async function loadMyWallets() {
   if (!state.account) return;
   try {
-    state.myLeashes = (await rpc.view(cfg.factoryId, "get_leashes", { owner: state.account })) || [];
+    state.myWallets = (await rpc.view(cfg.factoryId, "get_wallets", { owner: state.account })) || [];
   } catch {
-    state.myLeashes = [];
+    state.myWallets = [];
   }
 }
 
@@ -166,7 +166,7 @@ async function loadWallet(id) {
     state.loadError = /does not exist|UNKNOWN_ACCOUNT/i.test(msg)
       ? `${id} doesn't exist on ${cfg.network}.`
       : /MethodNotFound|CodeDoesNotExist|wasm execution failed|CompilationError/i.test(msg)
-        ? `${id} isn't a Leash wallet.`
+        ? `${id} isn't a Wardly wallet.`
         : `Couldn't load ${id}: ${msg}`;
   }
   render();
@@ -227,7 +227,7 @@ function render() {
 }
 
 function renderRail() {
-  const ids = [...new Set([...state.myLeashes, ...state.opened])];
+  const ids = [...new Set([...state.myWallets, ...state.opened])];
   const list = ids.length
     ? `<ul>${ids
         .map(
@@ -235,7 +235,7 @@ function renderRail() {
             `<li><button data-action="select" data-id="${esc(id)}" aria-current="${id === state.selected && state.view === "wallet"}">${esc(id)}</button></li>`,
         )
         .join("")}</ul>`
-    : `<p class="empty">${state.account ? "You don't have a Leash wallet yet." : "Connect a wallet to see the Leash wallets you own."}</p>`;
+    : `<p class="empty">${state.account ? "You don't have a Wardly wallet yet." : "Connect a wallet to see the Wardly wallets you own."}</p>`;
 
   $("rail").innerHTML = `
     <h2>Your wallets</h2>
@@ -254,11 +254,11 @@ function renderWelcome() {
   $("main").innerHTML = `
     <div class="welcome">
       <h1>Give your AI agent a wallet with limits</h1>
-      <p>A Leash wallet holds the money your agent is allowed to spend. You decide which accounts it can pay, the most it can send in one payment and in one day, and which payments wait for your approval.</p>
+      <p>A Wardly wallet holds the money your agent is allowed to spend. You decide which accounts it can pay, the most it can send in one payment and in one day, and which payments wait for your approval.</p>
       <p>The rules run in a contract on NEAR, so an agent that gets tricked by something it reads still can't break them.</p>
       <ol>
         <li>Connect your NEAR wallet.</li>
-        <li>Create a Leash wallet and set its rules.</li>
+        <li>Create a Wardly wallet and set its rules.</li>
         <li>Give your agent the wallet's account and a key that can only request payments.</li>
       </ol>
       ${
@@ -273,7 +273,7 @@ function renderCreate() {
   if (!state.account) {
     $("main").innerHTML = `
       <div class="welcome">
-        <h1>Create a Leash wallet</h1>
+        <h1>Create a Wardly wallet</h1>
         <p>Connect the NEAR account that should own the new wallet. Only the owner can change its rules or approve held payments.</p>
         <button data-action="connect">Connect wallet</button>
       </div>`;
@@ -281,7 +281,7 @@ function renderCreate() {
   }
   const min = state.minDeposit ? yoctoToNear(state.minDeposit, 2) : "2";
   $("main").innerHTML = `
-    <h1>Create a Leash wallet</h1>
+    <h1>Create a Wardly wallet</h1>
     <p class="muted" style="margin-top:6px">You'll be the owner. You can change everything except the name later.</p>
     <form class="section" data-form="create" novalidate>
       <div class="field">
@@ -516,7 +516,7 @@ document.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-action]");
   if (!btn || btn.disabled) return;
   const { action, id } = btn.dataset;
-  const leash = state.selected;
+  const wardly = state.selected;
   switch (action) {
     case "connect":
       return connect();
@@ -529,15 +529,15 @@ document.addEventListener("click", (e) => {
       loadMinDeposit().then(render);
       return render();
     case "pause":
-      return run(() => call(leash, "pause", {}), "Paused. The agent can't spend until you resume it.");
+      return run(() => call(wardly, "pause", {}), "Paused. The agent can't spend until you resume it.");
     case "unpause":
-      return run(() => call(leash, "unpause", {}), "Resumed. The agent can spend within its rules again.");
+      return run(() => call(wardly, "unpause", {}), "Resumed. The agent can spend within its rules again.");
     case "approve":
-      return run(() => call(leash, "approve", { id }, { tgas: 60 }), "Approved and sent.");
+      return run(() => call(wardly, "approve", { id }, { tgas: 60 }), "Approved and sent.");
     case "reject":
-      return run(() => call(leash, "reject", { id }), "Rejected. Nothing was sent.");
+      return run(() => call(wardly, "reject", { id }), "Rejected. Nothing was sent.");
     case "remove-recipient":
-      return run(() => call(leash, "remove_recipient", { account: id }), `Removed ${id}.`);
+      return run(() => call(wardly, "remove_recipient", { account: id }), `Removed ${id}.`);
   }
 });
 
@@ -554,7 +554,7 @@ document.addEventListener("submit", (e) => {
   const form = e.target.closest("[data-form]");
   if (!form) return;
   e.preventDefault();
-  const leash = state.selected;
+  const wardly = state.selected;
   try {
     switch (form.dataset.form) {
       case "open": {
@@ -583,9 +583,9 @@ document.addEventListener("submit", (e) => {
         }
         const newId = `${name}.${cfg.factoryId}`;
         return run(async () => {
-          await call(cfg.factoryId, "create_leash", { name, agent, ...limits, recipients }, { deposit, tgas: 200 });
-          await loadMyLeashes();
-          if (!state.myLeashes.includes(newId)) {
+          await call(cfg.factoryId, "create_wallet", { name, agent, ...limits, recipients }, { deposit, tgas: 200 });
+          await loadMyWallets();
+          if (!state.myWallets.includes(newId)) {
             throw new Error(`Couldn't create ${newId}. The name may be taken. Your deposit was refunded.`);
           }
           selectWallet(newId);
@@ -593,22 +593,22 @@ document.addEventListener("submit", (e) => {
       }
       case "add-recipient": {
         const id = accountId(form.id.value, "Account");
-        return run(() => call(leash, "add_recipient", { account: id }), `Added ${id}. The agent can now pay it.`);
+        return run(() => call(wardly, "add_recipient", { account: id }), `Added ${id}. The agent can now pay it.`);
       }
       case "limits": {
         const limits = limitsFromForm(form);
-        return run(() => call(leash, "set_limits", limits), "Rules saved.");
+        return run(() => call(wardly, "set_limits", limits), "Rules saved.");
       }
       case "agent": {
         const id = accountId(form.id.value, "Agent account");
-        return run(() => call(leash, "set_agent", { agent: id }), `The agent is now ${id}.`);
+        return run(() => call(wardly, "set_agent", { agent: id }), `The agent is now ${id}.`);
       }
       case "withdraw": {
         const amount = nearToYocto(form.amount.value);
         if (BigInt(amount) > BigInt(state.data.available)) {
           throw new Error(`You can withdraw up to ${near(state.data.available)}.`);
         }
-        return run(() => call(leash, "withdraw", { amount }), `Sent ${near(amount)} to the owner.`);
+        return run(() => call(wardly, "withdraw", { amount }), `Sent ${near(amount)} to the owner.`);
       }
     }
   } catch (err) {

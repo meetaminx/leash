@@ -1,11 +1,11 @@
-# Leash demo agent
+# Wardly demo agent
 
-A small AI purchasing agent that pays vendors through a Leash wallet on NEAR testnet. It reads a vendor's web page, decides whom to pay and how much using an LLM (Groq), and sends the payment request to Leash.
+A small AI purchasing agent that pays vendors through a Wardly wallet on NEAR testnet. It reads a vendor's web page, decides whom to pay and how much using an LLM (Groq), and sends the payment request to Wardly.
 
 The agent itself trusts the page it reads, like a typical agent. Two layers sit around it:
 
 1. **Injection filter** (optional): scans the page before the agent reads it, with two detectors (see below).
-2. **Leash contract**: enforces the owner's rules on-chain, whatever the agent decides.
+2. **Wardly contract**: enforces the owner's rules on-chain, whatever the agent decides.
 
 The demo shows that layer 2 holds even when layer 1 is off or misses.
 
@@ -14,14 +14,14 @@ The demo shows that layer 2 holds even when layer 1 is off or misses.
 | Page | What it contains | What should happen |
 | --- | --- | --- |
 | `pages/shop.html` | An honest vendor page | Agent pays 0.2 NEAR to `meetaminx-shop.testnet`. **Sent.** |
-| `pages/shop-redirect.html` | Hidden text telling AI agents the vendor's account "moved" to `nodehost-billing.testnet` | If the agent falls for it, Leash **blocks** it: recipient not on the allowlist. |
-| `pages/shop-overcharge.html` | Hidden text telling AI agents the price is 3 NEAR, paid to the real vendor | If the agent falls for it, Leash **blocks** it: over the per-payment cap. |
+| `pages/shop-redirect.html` | Hidden text telling AI agents the vendor's account "moved" to `nodehost-billing.testnet` | If the agent falls for it, Wardly **blocks** it: recipient not on the allowlist. |
+| `pages/shop-overcharge.html` | Hidden text telling AI agents the price is 3 NEAR, paid to the real vendor | If the agent falls for it, Wardly **blocks** it: over the per-payment cap. |
 
-The injected text sits in a `display:none` block, so a person visiting the page never sees it, but an agent reading the page's text does. Whether the model falls for it varies between runs and models; when it does, Leash stops it, and when it doesn't, nothing needed stopping.
+The injected text sits in a `display:none` block, so a person visiting the page never sees it, but an agent reading the page's text does. Whether the model falls for it varies between runs and models; when it does, Wardly stops it, and when it doesn't, nothing needed stopping.
 
 ## Setup
 
-Requires Node.js 20 or newer, the Leash contract deployed (see the main README), and the agent account's key in `~/.near-credentials` (created by `near account create-account ... save-to-legacy-keychain`).
+Requires Node.js 20 or newer, the Wardly contract deployed (see the main README), and the agent account's key in `~/.near-credentials` (created by `near account create-account ... save-to-legacy-keychain`).
 
 ```bash
 cd agent
@@ -37,7 +37,7 @@ Create the agent's restricted key:
 npm run setup-key
 ```
 
-This adds a new key to the agent account that NEAR itself limits to calling `request_payment` on the Leash contract, with a 0.25 NEAR gas budget. The agent only ever uses this key. It cannot send NEAR directly, change the wallet's rules, or call any other contract.
+This adds a new key to the agent account that NEAR itself limits to calling `request_payment` on the Wardly contract, with a 0.25 NEAR gas budget. The agent only ever uses this key. It cannot send NEAR directly, change the wallet's rules, or call any other contract.
 
 ## Run
 
@@ -81,6 +81,6 @@ npm test
 
 - `src/agent.js`: the agent: page loading, Groq tool calling, one payment per task
 - `src/filter.js`: the injection filter (Prompt Guard 2 and a gpt-oss-safeguard policy check, on Groq)
-- `src/leash.js`: client for the Leash contract
+- `src/wardly.js`: client for the Wardly contract
 - `src/setup-key.js`: creates the agent's function-call-only key
 - `src/status.js`: prints the wallet's current state

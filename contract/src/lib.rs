@@ -1,4 +1,4 @@
-//! Leash: a NEAR wallet contract that lets an AI agent spend, within limits
+//! Wardly: a NEAR wallet contract that lets an AI agent spend, within limits
 //! set by its owner.
 //!
 //! The agent can only ever call `request_payment`. Every request is checked
@@ -62,7 +62,7 @@ pub struct Config {
 
 #[near(contract_state)]
 #[derive(PanicOnDefault)]
-pub struct Leash {
+pub struct Wardly {
     owner: AccountId,
     agent: AccountId,
     max_per_tx: NearToken,
@@ -78,7 +78,7 @@ pub struct Leash {
 }
 
 #[near]
-impl Leash {
+impl Wardly {
     #[init]
     pub fn new(
         owner: AccountId,
@@ -88,10 +88,10 @@ impl Leash {
         approval_threshold: NearToken,
         recipients: Option<Vec<AccountId>>,
     ) -> Self {
-        require!(owner != agent, "LEASH: owner and agent must be different accounts");
+        require!(owner != agent, "WARDLY: owner and agent must be different accounts");
         Self::assert_limits(max_per_tx, daily_limit, approval_threshold);
         let recipients = recipients.unwrap_or_default();
-        require!(recipients.len() <= 50, "LEASH: at most 50 recipients at setup");
+        require!(recipients.len() <= 50, "WARDLY: at most 50 recipients at setup");
         let mut allowlist = IterableSet::new(StorageKey::Allowlist);
         for r in recipients {
             allowlist.insert(r);
@@ -126,20 +126,20 @@ impl Leash {
     ) -> PaymentOutcome {
         require!(
             env::predecessor_account_id() == self.agent,
-            "LEASH: only the agent can request payments"
+            "WARDLY: only the agent can request payments"
         );
-        require!(!self.paused, "LEASH: wallet is paused by the owner");
-        require!(!amount.is_zero(), "LEASH: amount must be greater than zero");
+        require!(!self.paused, "WARDLY: wallet is paused by the owner");
+        require!(!amount.is_zero(), "WARDLY: amount must be greater than zero");
         require!(
             self.allowlist.contains(&receiver),
-            "LEASH: recipient is not on the allowlist"
+            "WARDLY: recipient is not on the allowlist"
         );
         require!(
             amount <= self.max_per_tx,
-            "LEASH: amount exceeds the per-transaction limit"
+            "WARDLY: amount exceeds the per-transaction limit"
         );
         if let Some(m) = &memo {
-            require!(m.len() <= 256, "LEASH: memo is too long");
+            require!(m.len() <= 256, "WARDLY: memo is too long");
         }
 
         if amount > self.approval_threshold {
@@ -169,10 +169,10 @@ impl Leash {
         let new_total = self
             .spent_today
             .checked_add(amount)
-            .unwrap_or_else(|| env::panic_str("LEASH: overflow"));
+            .unwrap_or_else(|| env::panic_str("WARDLY: overflow"));
         require!(
             new_total <= self.daily_limit,
-            "LEASH: payment would exceed the daily limit"
+            "WARDLY: payment would exceed the daily limit"
         );
         self.spent_today = new_total;
 
@@ -191,10 +191,10 @@ impl Leash {
         let payment = self
             .pending
             .remove(&id.0)
-            .unwrap_or_else(|| env::panic_str("LEASH: no pending payment with that id"));
+            .unwrap_or_else(|| env::panic_str("WARDLY: no pending payment with that id"));
         require!(
             self.allowlist.contains(&payment.receiver),
-            "LEASH: recipient was removed from the allowlist"
+            "WARDLY: recipient was removed from the allowlist"
         );
         Self::log_event(
             "payment_approved",
@@ -207,7 +207,7 @@ impl Leash {
         self.assert_owner();
         require!(
             self.pending.remove(&id.0).is_some(),
-            "LEASH: no pending payment with that id"
+            "WARDLY: no pending payment with that id"
         );
         Self::log_event("payment_rejected", &format!(r#"{{"id":"{}"}}"#, id.0));
     }
@@ -238,7 +238,7 @@ impl Leash {
     /// Replace the agent account, for example if its key was compromised.
     pub fn set_agent(&mut self, agent: AccountId) {
         self.assert_owner();
-        require!(agent != self.owner, "LEASH: owner and agent must be different accounts");
+        require!(agent != self.owner, "WARDLY: owner and agent must be different accounts");
         self.agent = agent;
     }
 
@@ -347,25 +347,25 @@ impl Leash {
     fn assert_owner(&self) {
         require!(
             env::predecessor_account_id() == self.owner,
-            "LEASH: only the owner can do this"
+            "WARDLY: only the owner can do this"
         );
     }
 
     fn assert_limits(max_per_tx: NearToken, daily_limit: NearToken, approval_threshold: NearToken) {
-        require!(!max_per_tx.is_zero(), "LEASH: max_per_tx must be greater than zero");
+        require!(!max_per_tx.is_zero(), "WARDLY: max_per_tx must be greater than zero");
         require!(
             approval_threshold <= max_per_tx,
-            "LEASH: approval_threshold can't be above max_per_tx"
+            "WARDLY: approval_threshold can't be above max_per_tx"
         );
         require!(
             approval_threshold <= daily_limit,
-            "LEASH: approval_threshold can't be above daily_limit"
+            "WARDLY: approval_threshold can't be above daily_limit"
         );
     }
 
     fn log_event(event: &str, data: &str) {
         env::log_str(&format!(
-            r#"EVENT_JSON:{{"standard":"leash","version":"1.0.0","event":"{}","data":[{}]}}"#,
+            r#"EVENT_JSON:{{"standard":"wardly","version":"1.0.0","event":"{}","data":[{}]}}"#,
             event, data
         ));
     }

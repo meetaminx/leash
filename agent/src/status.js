@@ -1,21 +1,21 @@
-// Prints the Leash wallet's current rules and state.
+// Prints the Wardly wallet's current rules and state.
 
 import "dotenv/config";
-import { clientFromEnv, yoctoToNear } from "./leash.js";
+import { clientFromEnv, yoctoToNear } from "./wardly.js";
 
 const near = (yocto) => `${yoctoToNear(BigInt(yocto), 4)} NEAR`;
 
 async function main() {
-  const leash = clientFromEnv();
+  const wardly = clientFromEnv();
   const [config, remaining, allowlist, pending, balance] = await Promise.all([
-    leash.getConfig(),
-    leash.getRemainingToday(),
-    leash.getAllowlist(),
-    leash.getPending(),
-    leash.provider.viewAccount({ accountId: leash.contractId }).then((a) => a.amount).catch(() => null),
+    wardly.getConfig(),
+    wardly.getRemainingToday(),
+    wardly.getAllowlist(),
+    wardly.getPending(),
+    wardly.provider.viewAccount({ accountId: wardly.contractId }).then((a) => a.amount).catch(() => null),
   ]);
 
-  console.log(`Leash wallet: ${leash.contractId}`);
+  console.log(`Wardly wallet: ${wardly.contractId}`);
   if (balance) console.log(`  balance:              ${near(balance)}`);
   console.log(`  owner:                ${config.owner}`);
   console.log(`  agent:                ${config.agent}`);

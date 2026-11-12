@@ -1,13 +1,13 @@
-# Leash website and dashboard
+# Wardly website and dashboard
 
 Two parts:
 
-- `/`: the landing page, explaining Leash with an animated attack, a page viewer, a payment simulator that runs the contract's checks, use cases, testnet proof and a setup walkthrough (`index.html`, `src/landing.js`, `src/landing.css`)
-- `/app/`: the dashboard for Leash wallet owners (`app/index.html`, `src/main.js`)
+- `/`: the landing page, explaining Wardly with an animated attack, a page viewer, a payment simulator that runs the contract's checks, use cases, testnet proof and a setup walkthrough (`index.html`, `src/landing.js`, `src/landing.css`)
+- `/app/`: the dashboard for Wardly wallet owners (`app/index.html`, `src/main.js`)
 
-The dashboard is a web page for Leash wallet owners. Connect a NEAR wallet, then:
+The dashboard is a web page for Wardly wallet owners. Connect a NEAR wallet, then:
 
-- create a Leash wallet through the factory, with its agent, limits and approved recipients
+- create a Wardly wallet through the factory, with its agent, limits and approved recipients
 - see how much the agent can still spend today, against the approval limit and per-payment cap
 - approve or reject payments waiting for approval
 - add and remove approved recipients, change the rules, swap the agent, pause, and withdraw

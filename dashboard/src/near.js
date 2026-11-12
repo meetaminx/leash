@@ -28,10 +28,10 @@ export function percent(part, whole) {
   return Math.max(0, Math.min(100, Number(p) / 100));
 }
 
-/** Pull "LEASH: ..." or "FACTORY: ..." out of an error or failed outcome. */
+/** Pull "WARDLY: ..." or "FACTORY: ..." out of an error or failed outcome. */
 export function contractError(errOrOutcome) {
   const text = typeof errOrOutcome === "string" ? errOrOutcome : JSON.stringify(errOrOutcome ?? "") + String(errOrOutcome?.message ?? "");
-  const match = text.match(/(LEASH|FACTORY): [^"\\]+/);
+  const match = text.match(/(WARDLY|FACTORY): [^"\\]+/);
   return match ? match[0] : null;
 }
 

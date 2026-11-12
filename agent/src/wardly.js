@@ -1,7 +1,7 @@
-// Thin client for the Leash wallet contract.
+// Thin client for the Wardly wallet contract.
 //
 // The agent signs with a function-call access key that NEAR itself limits to
-// calling `request_payment` on the Leash contract. Every rule (allowlist,
+// calling `request_payment` on the Wardly contract. Every rule (allowlist,
 // per-payment cap, daily limit, approval threshold) is enforced on-chain.
 
 import { Account, JsonRpcProvider, actions, nearToYocto, yoctoToNear, teraToGas } from "near-api-js";
@@ -14,8 +14,8 @@ export function explorerTxUrl(network, txHash) {
 /** Pull the human-readable reason out of a failed transaction. */
 export function extractFailureReason(failure) {
   const text = JSON.stringify(failure);
-  const leash = text.match(/LEASH: [^"\\]+/);
-  if (leash) return leash[0];
+  const wardly = text.match(/WARDLY: [^"\\]+/);
+  if (wardly) return wardly[0];
   const panic = text.match(/"ExecutionError":"([^"]+)"/);
   if (panic) return panic[1];
   return text.slice(0, 300);
@@ -30,7 +30,7 @@ function decodeSuccessValue(value) {
   }
 }
 
-export class LeashClient {
+export class WardlyClient {
   constructor({ rpcUrl, network, contractId, agentAccountId, agentPrivateKey }) {
     this.network = network;
     this.contractId = contractId;
@@ -62,7 +62,7 @@ export class LeashClient {
   }
 
   /**
-   * Ask Leash to pay. Never throws for a contract rejection: returns
+   * Ask Wardly to pay. Never throws for a contract rejection: returns
    * { status: "sent" | "pending" | "blocked", reason?, txHash, explorerUrl }.
    */
   async requestPayment({ receiver, amountNear, memo }) {
@@ -93,14 +93,14 @@ export class LeashClient {
 }
 
 export function clientFromEnv(env = process.env) {
-  const required = ["NEAR_RPC_URL", "LEASH_CONTRACT", "AGENT_ACCOUNT"];
+  const required = ["NEAR_RPC_URL", "WARDLY_CONTRACT", "AGENT_ACCOUNT"];
   for (const key of required) {
     if (!env[key]) throw new Error(`Missing ${key} in .env (see .env.example)`);
   }
-  return new LeashClient({
+  return new WardlyClient({
     rpcUrl: env.NEAR_RPC_URL,
     network: env.NEAR_NETWORK || "testnet",
-    contractId: env.LEASH_CONTRACT,
+    contractId: env.WARDLY_CONTRACT,
     agentAccountId: env.AGENT_ACCOUNT,
     agentPrivateKey: env.AGENT_PRIVATE_KEY || null,
   });

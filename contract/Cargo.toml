@@ -1,5 +1,5 @@
 [package]
-name = "leash"
+name = "wardly"
 version = "0.1.0"
 edition = "2021"
 description = "Spending limits for AI agents on NEAR"

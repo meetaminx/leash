@@ -1,10 +1,10 @@
 // Demo purchasing agent.
 //
 // Reads a vendor web page, asks an LLM (via Groq) what to buy and whom to pay,
-// and pays through the Leash wallet. The agent itself trusts the page it
+// and pays through the Wardly wallet. The agent itself trusts the page it
 // reads, like a typical agent. Two layers sit around it:
 //   1. an optional injection filter that scans the page first (src/filter.js)
-//   2. the Leash contract, which enforces the owner's rules on-chain
+//   2. the Wardly contract, which enforces the owner's rules on-chain
 // The point of the demo is that layer 2 holds even when layer 1 misses.
 //
 // Usage:
@@ -16,7 +16,7 @@
 import "dotenv/config";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
-import { clientFromEnv } from "./leash.js";
+import { clientFromEnv } from "./wardly.js";
 import { groqPolicyCheck, groqPromptGuard, scanText, warningForAgent } from "./filter.js";
 
 export const DEFAULT_TASK = "Buy the 1,000 API credits pack from NodeHost for our project.";
@@ -91,9 +91,9 @@ export function groqChat({ apiKey, model }) {
 
 /**
  * Run one purchase. `llm(messages, tools)` returns an assistant message;
- * `leash.requestPayment(...)` performs the payment.
+ * `wardly.requestPayment(...)` performs the payment.
  */
-export async function runAgent({ task, pageText, llm, leash, notice = null, log = console.log }) {
+export async function runAgent({ task, pageText, llm, wardly, notice = null, log = console.log }) {
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
     {
@@ -135,8 +135,8 @@ export async function runAgent({ task, pageText, llm, leash, notice = null, log 
         if (!args.receiver || !/^\d+(\.\d+)?$/.test(amount)) {
           resultForModel = { error: "pay needs a receiver and a numeric amount_near" };
         } else {
-          log("\nSending to Leash...");
-          const outcome = await leash.requestPayment({ receiver: args.receiver, amountNear: amount, memo: args.memo });
+          log("\nSending to Wardly...");
+          const outcome = await wardly.requestPayment({ receiver: args.receiver, amountNear: amount, memo: args.memo });
           payments.push({ ...args, amount_near: amount, outcome });
           printOutcome(outcome, log);
           resultForModel = describeOutcomeForModel(outcome);
@@ -171,7 +171,7 @@ function printOutcome(outcome, log) {
   } else if (outcome.status === "pending") {
     log(`  HELD: above the approval threshold, waiting for the owner (request #${outcome.pendingId}).`);
   } else {
-    log(`  BLOCKED by Leash: ${outcome.reason}`);
+    log(`  BLOCKED by Wardly: ${outcome.reason}`);
     log("  No money moved.");
   }
   log(`  ${outcome.explorerUrl}`);
@@ -200,14 +200,14 @@ async function main() {
     throw new Error("GROQ_API_KEY in .env doesn't look like a single Groq key (gsk_...). It may have been pasted more than once.");
   }
 
-  const leash = clientFromEnv();
+  const wardly = clientFromEnv();
   const pageText = await loadPage(page);
   const model = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
 
   console.log(`Task:   ${task}`);
   console.log(`Page:   ${page}`);
   console.log(`Model:  ${model}`);
-  console.log(`Wallet: ${leash.contractId} (agent key can only call request_payment)`);
+  console.log(`Wallet: ${wardly.contractId} (agent key can only call request_payment)`);
   console.log(`Filter: ${filter}`);
 
   let notice = null;
@@ -233,7 +233,7 @@ async function main() {
     }
   }
 
-  await runAgent({ task, pageText, llm: groqChat({ apiKey, model }), leash, notice });
+  await runAgent({ task, pageText, llm: groqChat({ apiKey, model }), wardly, notice });
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

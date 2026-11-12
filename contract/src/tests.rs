@@ -23,7 +23,7 @@ fn near(n: u128) -> NearToken {
 
 fn set_caller(caller: AccountId, timestamp: u64) {
     let ctx = VMContextBuilder::new()
-        .current_account_id("leash.near".parse().unwrap())
+        .current_account_id("wardly.near".parse().unwrap())
         .predecessor_account_id(caller)
         .block_timestamp(timestamp)
         .account_balance(near(100))
@@ -33,9 +33,9 @@ fn set_caller(caller: AccountId, timestamp: u64) {
 
 /// Wallet with: max 5 NEAR per payment, 10 NEAR per day, owner approval
 /// above 2 NEAR, and shop.near on the allowlist.
-fn setup() -> Leash {
+fn setup() -> Wardly {
     set_caller(owner(), DAY * 1000);
-    let mut c = Leash::new(owner(), agent(), near(5), near(10), near(2), None);
+    let mut c = Wardly::new(owner(), agent(), near(5), near(10), near(2), None);
     c.add_recipient(shop());
     c
 }
@@ -189,7 +189,7 @@ fn approval_fails_if_recipient_was_removed() {
 #[should_panic(expected = "approval_threshold can't be above max_per_tx")]
 fn init_rejects_inconsistent_limits() {
     set_caller(owner(), DAY * 1000);
-    Leash::new(owner(), agent(), near(1), near(10), near(2), None);
+    Wardly::new(owner(), agent(), near(1), near(10), near(2), None);
 }
 
 #[test]
@@ -200,8 +200,8 @@ fn failed_transfer_gives_allowance_back() {
     assert_eq!(c.get_remaining_today(), near(8));
 
     let ctx = VMContextBuilder::new()
-        .current_account_id("leash.near".parse().unwrap())
-        .predecessor_account_id("leash.near".parse().unwrap())
+        .current_account_id("wardly.near".parse().unwrap())
+        .predecessor_account_id("wardly.near".parse().unwrap())
         .block_timestamp(DAY * 1000)
         .build();
     testing_env!(
@@ -218,7 +218,7 @@ fn failed_transfer_gives_allowance_back() {
 #[test]
 fn recipients_can_be_set_at_creation() {
     set_caller(owner(), DAY * 1000);
-    let c = Leash::new(owner(), agent(), near(5), near(10), near(2), Some(vec![shop(), "api.near".parse().unwrap()]));
+    let c = Wardly::new(owner(), agent(), near(5), near(10), near(2), Some(vec![shop(), "api.near".parse().unwrap()]));
     let list = c.get_allowlist();
     assert_eq!(list.len(), 2);
     assert!(list.contains(&shop()));

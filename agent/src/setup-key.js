@@ -2,7 +2,7 @@
 //
 // Generates a new key pair, then uses the agent account's full access key
 // (from the NEAR CLI keychain on this machine) to add it as a function-call
-// access key that can only call `request_payment` on the Leash contract.
+// access key that can only call `request_payment` on the Wardly contract.
 // The new private key is written to .env. The agent never sees the full
 // access key.
 
@@ -11,7 +11,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { Account, JsonRpcProvider, KeyPair, nearToYocto } from "near-api-js";
-import { explorerTxUrl } from "./leash.js";
+import { explorerTxUrl } from "./wardly.js";
 
 const ENV_PATH = path.resolve(".env");
 const force = process.argv.includes("--force");
@@ -27,10 +27,10 @@ function setEnvValue(file, key, value) {
 async function main() {
   const network = process.env.NEAR_NETWORK || "testnet";
   const rpcUrl = process.env.NEAR_RPC_URL;
-  const contractId = process.env.LEASH_CONTRACT;
+  const contractId = process.env.WARDLY_CONTRACT;
   const agentId = process.env.AGENT_ACCOUNT;
   if (!rpcUrl || !contractId || !agentId) {
-    throw new Error("Fill in NEAR_RPC_URL, LEASH_CONTRACT and AGENT_ACCOUNT in .env first (copy .env.example to .env).");
+    throw new Error("Fill in NEAR_RPC_URL, WARDLY_CONTRACT and AGENT_ACCOUNT in .env first (copy .env.example to .env).");
   }
   if (process.env.AGENT_PRIVATE_KEY && !force) {
     throw new Error("AGENT_PRIVATE_KEY is already set in .env. Run `npm run setup-key -- --force` to replace it.");

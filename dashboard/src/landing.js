@@ -3,7 +3,7 @@
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // ---------------------------------------------------------------------------
-// Hero: an agent reads a poisoned page, tries to pay the attacker, Leash blocks it.
+// Hero: an agent reads a poisoned page, tries to pay the attacker, Wardly blocks it.
 // ---------------------------------------------------------------------------
 
 const scene = document.getElementById("scene");
@@ -73,7 +73,7 @@ export function evaluate({ receiver, amount, spent, paused }) {
   const steps = [];
   const stop = (label, reason) => {
     steps.push({ label, ok: false });
-    return { steps, outcome: "blocked", message: `LEASH: ${reason}` };
+    return { steps, outcome: "blocked", message: `WARDLY: ${reason}` };
   };
   if (paused) return stop("Agent not paused", "wallet is paused by the owner");
   steps.push({ label: "Agent not paused", ok: true });

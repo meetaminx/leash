@@ -1,7 +1,7 @@
 {
-  "name": "leash-demo-agent",
+  "name": "wardly-demo-agent",
   "version": "0.1.0",
-  "description": "A demo AI purchasing agent that pays through a Leash wallet on NEAR",
+  "description": "A demo AI purchasing agent that pays through a Wardly wallet on NEAR",
   "type": "module",
   "license": "MIT",
   "engines": {

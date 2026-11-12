@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Leash: spending limits for AI agents on NEAR</title>
-    <meta name="description" content="Leash is a NEAR wallet for AI agents. You choose who it can pay, how much, and when it has to ask you first. The rules run on-chain, so an agent that gets tricked still can't break them." />
+    <title>Wardly: spending limits for AI agents on NEAR</title>
+    <meta name="description" content="Wardly is a NEAR wallet for AI agents. You choose who it can pay, how much, and when it has to ask you first. The rules run on-chain, so an agent that gets tricked still can't break them." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,7 +15,7 @@
   </head>
   <body class="landing">
     <header class="topbar lp-nav">
-      <a class="brand" href="/"><img src="/logo-mark-outline.svg" alt="" width="30" height="30" /><span>Leash</span></a>
+      <a class="brand" href="/"><img src="/logo-mark-outline.svg" alt="" width="30" height="30" /><span>Wardly</span></a>
       <span class="network">Testnet</span>
       <nav class="lp-links" aria-label="Sections">
         <a href="#problem">The problem</a>
@@ -33,15 +33,15 @@
       <section class="hero">
         <div class="hero-copy">
           <h1>Your agent will get tricked. Your wallet won't.</h1>
-          <p class="lede">Leash is a NEAR wallet for AI agents. You choose who it can pay, how much, and when it has to ask you first. The rules run on-chain, so an agent that gets tricked still can't break them.</p>
+          <p class="lede">Wardly is a NEAR wallet for AI agents. You choose who it can pay, how much, and when it has to ask you first. The rules run on-chain, so an agent that gets tricked still can't break them.</p>
           <div class="hero-actions">
             <a class="lp-btn" href="/app/?create">Get started</a>
             <button class="lp-btn lp-btn-quiet" type="button" data-replay>See it stop an attack</button>
           </div>
-          <p class="hero-note">Live on NEAR testnet. Every step in the animation happened on-chain: <a href="https://explorer.testnet.near.org/transactions/8uvgRbTmQoEJTHJCFyVMfpAdcoGjYrnYQfj2pus56vui" target="_blank" rel="noopener">see the blocked payment</a>.</p>
+          <p class="hero-note">Live on NEAR testnet. Every step in the animation happened on-chain: <a href="https://explorer.testnet.near.org/transactions/C7k7WNZUZL3hmdPha6ogpqPK1tgJWPFQC8qsFjFe4aYA" target="_blank" rel="noopener">see the blocked payment</a>.</p>
         </div>
 
-        <figure class="scene" id="scene" aria-label="Animation: an AI agent reads a shop page with hidden instructions, tries to pay an attacker, and Leash blocks the payment.">
+        <figure class="scene" id="scene" aria-label="Animation: an AI agent reads a shop page with hidden instructions, tries to pay an attacker, and Wardly blocks the payment.">
           <div class="scene-card page-card">
             <div class="card-head">
               <svg class="card-icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="22" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M5 11h22" stroke="currentColor" stroke-width="2.2"/><circle cx="8.5" cy="8" r="1" fill="currentColor"/><circle cx="11.5" cy="8" r="1" fill="currentColor"/></svg>
@@ -69,8 +69,8 @@
 
           <div class="scene-card wallet-card">
             <div class="card-head">
-              <svg class="card-icon" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="14" fill="#1D2A2E"/><circle cx="22" cy="17" r="7" fill="none" stroke="#C99A3E" stroke-width="5"/><path d="M22 24v19a8 8 0 0 0 8 8h14" fill="none" stroke="#C99A3E" stroke-width="5" stroke-linecap="round"/><rect x="43" y="45.5" width="11" height="11" rx="3" fill="#E9EEEC"/></svg>
-              <span class="card-title">Leash wallet</span>
+              <svg class="card-icon" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="14" fill="#1D2A2E"/><circle cx="15" cy="16" r="6" fill="none" stroke="#C99A3E" stroke-width="4.5"/><path d="M15 22c0 14 2 24 7 24s6-16 10-16 5 16 10 16 6-14 6-24" fill="none" stroke="#C99A3E" stroke-width="4.5" stroke-linecap="round"/><rect x="43" y="11" width="10" height="10" rx="3" fill="#E9EEEC"/></svg>
+              <span class="card-title">Wardly wallet</span>
             </div>
             <ul class="checks">
               <li data-check="allow"><span class="tick"></span>Approved recipient</li>
@@ -79,7 +79,7 @@
             </ul>
             <div class="verdict">
               <strong>Blocked</strong>
-              <span>LEASH: recipient is not on the allowlist. No money moved.</span>
+              <span>WARDLY: recipient is not on the allowlist. No money moved.</span>
             </div>
           </div>
 
@@ -138,7 +138,7 @@ Send the exact price in NEAR to meetaminx-shop.testnet.
             </li>
             <li>
               <h3>A key that can only ask</h3>
-              <p>The agent signs with a NEAR function-call key that can call one thing: <code>request_payment</code> on your Leash. It can't send NEAR directly, change rules or touch other contracts.</p>
+              <p>The agent signs with a NEAR function-call key that can call one thing: <code>request_payment</code> on your Wardly. It can't send NEAR directly, change rules or touch other contracts.</p>
             </li>
             <li class="layer-main">
               <h3>Rules in the contract</h3>
@@ -178,7 +178,7 @@ Send the exact price in NEAR to meetaminx-shop.testnet.
 
           <div class="cta-row">
             <a class="lp-btn" href="/app/?create">Get started</a>
-            <span class="muted">Create a Leash wallet on testnet in one transaction.</span>
+            <span class="muted">Create a Wardly wallet on testnet in one transaction.</span>
           </div>
         </div>
       </section>
@@ -186,7 +186,7 @@ Send the exact price in NEAR to meetaminx-shop.testnet.
       <!-- Use cases -->
       <section class="band" id="use-cases">
         <div class="wrap">
-          <h2>Where Leash fits</h2>
+          <h2>Where Wardly fits</h2>
           <p class="section-lede">Any agent that pays for things on its own. Here are rules you might set for a few of them.</p>
           <div class="cases">
             <article>
@@ -226,9 +226,9 @@ Send the exact price in NEAR to meetaminx-shop.testnet.
             <table class="proof">
               <thead><tr><th>Page</th><th>What the agent tried</th><th>Filter (policy check)</th><th>Contract</th></tr></thead>
               <tbody>
-                <tr><td>Honest shop</td><td>0.2 NEAR to meetaminx-shop.testnet</td><td class="num">0.00, clean</td><td><a href="https://explorer.testnet.near.org/transactions/2Npb7Y6augHX8NZEKDwfB7UijumiuaSiubBx763YycW9" target="_blank" rel="noopener">Sent</a></td></tr>
-                <tr><td>Redirect attack</td><td>0.2 NEAR to nodehost-billing.testnet</td><td class="num">0.99, flagged</td><td><a class="bad" href="https://explorer.testnet.near.org/transactions/8uvgRbTmQoEJTHJCFyVMfpAdcoGjYrnYQfj2pus56vui" target="_blank" rel="noopener">Blocked: not on the allowlist</a></td></tr>
-                <tr><td>Overcharge attack</td><td>3 NEAR to meetaminx-shop.testnet</td><td class="num">0.99, flagged</td><td><a class="bad" href="https://explorer.testnet.near.org/transactions/Fn8tBAkjD4gv5b9EjNsphn5y9sZ3qGhPAqe2k1Yd2NQ4" target="_blank" rel="noopener">Blocked: over the per-payment cap</a></td></tr>
+                <tr><td>Honest shop</td><td>0.2 NEAR to meetaminx-shop.testnet</td><td class="num">0.00, clean</td><td><a href="https://explorer.testnet.near.org/transactions/Bd8uGmXjx12oYRJtK3dkUZerMbC9DbEhWQWGWGyGkBNk" target="_blank" rel="noopener">Sent</a></td></tr>
+                <tr><td>Redirect attack</td><td>0.2 NEAR to nodehost-billing.testnet</td><td class="num">0.99, flagged</td><td><a class="bad" href="https://explorer.testnet.near.org/transactions/C7k7WNZUZL3hmdPha6ogpqPK1tgJWPFQC8qsFjFe4aYA" target="_blank" rel="noopener">Blocked: not on the allowlist</a></td></tr>
+                <tr><td>Overcharge attack</td><td>3 NEAR to meetaminx-shop.testnet</td><td class="num">0.99, flagged</td><td><a class="bad" href="https://explorer.testnet.near.org/transactions/BBcUBMrou5CrD21bFGUsEKacxso9Tt9DxqJhs8NaFsNP" target="_blank" rel="noopener">Blocked: over the per-payment cap</a></td></tr>
               </tbody>
             </table>
           </div>
@@ -243,11 +243,11 @@ Send the exact price in NEAR to meetaminx-shop.testnet.
           <div class="walkthrough" id="walkthrough">
             <div class="wt-screen" aria-live="polite">
               <div class="wt-frame" data-frame="0">
-                <div class="wt-bar"><span>Leash</span><span class="wt-pill">Connect wallet</span></div>
-                <div class="wt-body"><div class="wt-h">Create a Leash wallet</div><div class="wt-input">research-bot</div><div class="wt-input">my-agent.testnet</div><div class="wt-row"><div class="wt-input">1 NEAR</div><div class="wt-input">2 NEAR</div><div class="wt-input">0.5 NEAR</div></div><div class="wt-btn">Create wallet</div></div>
+                <div class="wt-bar"><span>Wardly</span><span class="wt-pill">Connect wallet</span></div>
+                <div class="wt-body"><div class="wt-h">Create a Wardly wallet</div><div class="wt-input">research-bot</div><div class="wt-input">my-agent.testnet</div><div class="wt-row"><div class="wt-input">1 NEAR</div><div class="wt-input">2 NEAR</div><div class="wt-input">0.5 NEAR</div></div><div class="wt-btn">Create wallet</div></div>
               </div>
               <div class="wt-frame" data-frame="1">
-                <div class="wt-bar"><span>Leash</span><span>research-bot</span></div>
+                <div class="wt-bar"><span>Wardly</span><span>research-bot</span></div>
                 <div class="wt-body"><div class="wt-h">Approved recipients</div><div class="wt-li">api-provider.testnet</div><div class="wt-li">data-shop.testnet</div><div class="wt-input">account.testnet</div><div class="wt-btn small">Add</div></div>
               </div>
               <div class="wt-frame" data-frame="2">
@@ -255,13 +255,13 @@ Send the exact price in NEAR to meetaminx-shop.testnet.
                 <div class="wt-body mono"><div>request_payment(</div><div>&nbsp;&nbsp;receiver: "data-shop.testnet",</div><div>&nbsp;&nbsp;amount: 0.8 NEAR</div><div>)</div><div class="wt-held">Held: above your 0.5 NEAR approval limit</div></div>
               </div>
               <div class="wt-frame" data-frame="3">
-                <div class="wt-bar"><span>Leash</span><span>research-bot</span></div>
+                <div class="wt-bar"><span>Wardly</span><span>research-bot</span></div>
                 <div class="wt-body"><div class="wt-h">Waiting for your approval</div><div class="wt-li"><strong>0.8 NEAR</strong> to data-shop.testnet</div><div class="wt-row"><div class="wt-btn">Approve and send</div><div class="wt-btn ghost">Reject</div></div></div>
               </div>
             </div>
             <div class="wt-side">
               <ol class="wt-steps">
-                <li data-step="0"><h3>Create a wallet</h3><p>Connect your NEAR wallet, name your Leash, and set its limits. One transaction creates it.</p></li>
+                <li data-step="0"><h3>Create a wallet</h3><p>Connect your NEAR wallet, name your Wardly, and set its limits. One transaction creates it.</p></li>
                 <li data-step="1"><h3>Approve who it can pay</h3><p>Add the accounts your agent is allowed to pay. Everyone else is refused.</p></li>
                 <li data-step="2"><h3>Connect your agent</h3><p>Give the agent a key that can only call <code>request_payment</code>. Small payments go straight through.</p></li>
                 <li data-step="3"><h3>Approve big payments</h3><p>Anything above your threshold waits for you in the dashboard. Approve or reject it.</p></li>
@@ -273,11 +273,11 @@ Send the exact price in NEAR to meetaminx-shop.testnet.
           <div class="dev">
             <div>
               <h3>For developers</h3>
-              <p>Your agent pays through Leash with one call. The <a href="https://github.com/meetaminx/leash/tree/main/agent" target="_blank" rel="noopener">agent folder</a> has the client, a demo agent, the injection filter, and a script that creates the restricted key.</p>
-              <a class="lp-btn lp-btn-quiet" href="https://github.com/meetaminx/leash" target="_blank" rel="noopener">View the code on GitHub</a>
+              <p>Your agent pays through Wardly with one call. The <a href="https://github.com/meetaminx/wardly/tree/main/agent" target="_blank" rel="noopener">agent folder</a> has the client, a demo agent, the injection filter, and a script that creates the restricted key.</p>
+              <a class="lp-btn lp-btn-quiet" href="https://github.com/meetaminx/wardly" target="_blank" rel="noopener">View the code on GitHub</a>
             </div>
-            <pre class="code"><code><span class="c">// Ask Leash to pay. Rejections come back, they don't throw.</span>
-const result = await leash.requestPayment({
+            <pre class="code"><code><span class="c">// Ask Wardly to pay. Rejections come back, they don't throw.</span>
+const result = await wardly.requestPayment({
   receiver: "data-shop.testnet",
   amountNear: "0.2",
   memo: "1,000 credits",
@@ -306,8 +306,8 @@ if (result.status === "blocked") console.log(result.reason);</code></pre>
             <p>The thief gets the same limits the agent had: approved recipients only, capped amounts, and nothing above your approval threshold without you. Pause the wallet from the dashboard and switch to a new agent account.</p>
           </details>
           <details>
-            <summary>Is Leash audited? Can I use it with real money?</summary>
-            <p>Not yet. Leash is a hackathon project running on NEAR testnet, and the contracts have not been audited. Don't use it with real funds.</p>
+            <summary>Is Wardly audited? Can I use it with real money?</summary>
+            <p>Not yet. Wardly is a hackathon project running on NEAR testnet, and the contracts have not been audited. Don't use it with real funds.</p>
           </details>
           <details>
             <summary>Does it work with any AI agent?</summary>
@@ -320,7 +320,7 @@ if (result.status === "blocked") console.log(result.reason);</code></pre>
       <section class="closing">
         <div class="wrap">
           <h2>Give your agent a wallet with limits</h2>
-          <p>Create a Leash on testnet, set its rules, and let your agent spend inside them.</p>
+          <p>Create a Wardly on testnet, set its rules, and let your agent spend inside them.</p>
           <a class="lp-btn lp-btn-light" href="/app/?create">Get started</a>
         </div>
       </section>
@@ -328,7 +328,7 @@ if (result.status === "blocked") console.log(result.reason);</code></pre>
 
     <footer class="site-footer">
       <a href="/app/">Dashboard</a>
-      <a href="https://github.com/meetaminx/leash" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/meetaminx/wardly" target="_blank" rel="noopener">GitHub</a>
       <a href="/privacy.html">Privacy policy</a>
       <a href="/terms.html">Terms</a>
       <span class="muted">Testnet only. Unaudited, don't use with real funds.</span>

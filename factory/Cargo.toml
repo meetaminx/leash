@@ -1,8 +1,8 @@
 [package]
-name = "leash-factory"
+name = "wardly-factory"
 version = "0.1.0"
 edition = "2021"
-description = "Creates Leash wallets in one transaction"
+description = "Creates Wardly wallets in one transaction"
 license = "MIT"
 
 [lib]
