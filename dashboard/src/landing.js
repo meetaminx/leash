@@ -49,6 +49,30 @@ function loopHero() {
   }, LOOP_MS);
 }
 document.querySelectorAll("[data-replay]").forEach((btn) => btn.addEventListener("click", loopHero));
+// Mobile menu: open and close the section links.
+const menuBtn = document.querySelector(".lp-menu-btn");
+const menu = document.getElementById("lp-links");
+function setMenu(open) {
+  menu.classList.toggle("open", open);
+  menuBtn.setAttribute("aria-expanded", String(open));
+}
+menuBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  setMenu(!menu.classList.contains("open"));
+});
+menu.addEventListener("click", (e) => {
+  if (e.target.closest("a")) setMenu(false);
+});
+document.addEventListener("click", (e) => {
+  if (menu.classList.contains("open") && !e.target.closest(".lp-nav")) setMenu(false);
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && menu.classList.contains("open")) {
+    setMenu(false);
+    menuBtn.focus();
+  }
+});
+
 // Start the hero once the intro (if any) has opened the page.
 window.__introDone.then(loopHero);
 

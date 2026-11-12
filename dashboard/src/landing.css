@@ -392,8 +392,23 @@ details p { margin-top: 10px; color: #33444a; }
 
 /* Responsive */
 @media (max-width: 980px) {
-  .lp-links { display: none; }
   .lp-nav .lp-btn { margin-left: auto; }
+  .lp-menu-btn { display: inline-flex; }
+  .lp-links {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    margin: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 6px 16px 14px;
+    background: var(--ink);
+    border-top: 1px solid #33464b;
+    box-shadow: 0 10px 24px rgba(16, 24, 26, 0.25);
+  }
+  .lp-links.open { display: flex; animation: menuIn 180ms ease-out; }
+  .lp-links a { padding: 13px 4px; font-size: 1.05rem; color: #eef2f1; border-bottom: 1px solid #2c3e43; }
+  .lp-links a:last-child { border-bottom: 0; }
   .hero { grid-template-columns: 1fr; padding-top: 48px; gap: 40px; }
   .two-col, .walkthrough, .dev { grid-template-columns: 1fr; gap: 28px; }
   .layers { grid-template-columns: 1fr; }
@@ -484,3 +499,29 @@ main section[id] { scroll-margin-top: 72px; }
   background: var(--rope);
   transform: scale(0);
 }
+
+/* Mobile menu button (shown below 980px) */
+.lp-menu-btn {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  margin-left: 10px;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #eef2f1;
+  background: transparent;
+  border: 1px solid #4b5d62;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.lp-menu-btn:hover { border-color: #c3cfcd; background: transparent; }
+.lp-menu-btn svg path { stroke: currentColor; stroke-width: 2; stroke-linecap: round; transition: transform 180ms ease, opacity 180ms ease; transform-origin: 10px 10px; }
+.lp-menu-btn[aria-expanded="true"] .bar-top { transform: translateY(4px) rotate(45deg); }
+.lp-menu-btn[aria-expanded="true"] .bar-mid { opacity: 0; }
+.lp-menu-btn[aria-expanded="true"] .bar-bot { transform: translateY(-4px) rotate(-45deg); }
+@keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .lp-links.open { animation: none; } .lp-menu-btn svg path { transition: none; } }
+@media (max-width: 420px) { .lp-menu-btn span { display: none; } .lp-menu-btn { padding: 8px 10px; } .lp-nav .network { display: none; } }
+@media (max-width: 980px) { .lp-menu-btn { display: inline-flex; } }
