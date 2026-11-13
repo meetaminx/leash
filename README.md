@@ -4,8 +4,8 @@
 
 Spending limits for AI agents on NEAR. If an agent is tricked into trying to send your money somewhere it shouldn't, Wardly makes sure it can't spend more than you allowed.
 
-- **Website:** https://wardly-near.vercel.app
-- **Dashboard (testnet):** https://wardly-near.vercel.app/app/
+- **Website:** https://wardly.xyz
+- **Dashboard (testnet):** https://wardly.xyz/app/
 - **Code:** https://github.com/meetaminx/wardly
 - **Factory:** `meetaminx-wardly-factory.testnet`, demo wallet: `meetaminx-wardly.testnet`
 
@@ -55,7 +55,7 @@ Wardly starts from the assumption that an agent will eventually be fooled, and m
 
 ## Demo
 
-Wardly is live on NEAR testnet at `meetaminx-wardly.testnet`, and you can open it in the [dashboard](https://wardly-near.vercel.app/app/?wallet=meetaminx-wardly.testnet). The demo agent (`agent/`) is an LLM purchasing agent (`openai/gpt-oss-120b` on Groq) that reads a vendor's page and pays through Wardly. It has no injection defenses of its own. In these runs the model **was fooled both times**, and the contract stopped it both times.
+Wardly is live on NEAR testnet at `meetaminx-wardly.testnet`, and you can open it in the [dashboard](https://wardly.xyz/app/?wallet=meetaminx-wardly.testnet). The demo agent (`agent/`) is an LLM purchasing agent (`openai/gpt-oss-120b` on Groq) that reads a vendor's page and pays through Wardly. It has no injection defenses of its own. In these runs the model **was fooled both times**, and the contract stopped it both times.
 
 | Run | What the page said | What the agent tried | Wardly | Transaction |
 | --- | --- | --- | --- | --- |
